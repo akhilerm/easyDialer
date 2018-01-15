@@ -2,6 +2,7 @@ package com.akhilerm.easydialer;
 
 import android.Manifest;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -22,6 +24,8 @@ public class MainActivity extends AppCompatActivity {
     private String phoneNumber;
     private final int MY_PERMISSIONS_REQUEST_CALL = 1;
     private static final String TAG = MainActivity.class.getName();
+    private boolean registered=true;
+    private DialReceiver dialReceiver = new DialReceiver();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +49,30 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     dialCall();
                 }
+            }
+        });
+        FloatingActionButton fab2 = (FloatingActionButton) findViewById(R.id.switchButton);
+        fab2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (registered) {
+                    try {
+
+
+                    Log.e(TAG, "UNregistered");
+                    unregisterReceiver(dialReceiver);
+                    registered=!registered;}
+                    catch (Exception e) {
+                        Log.e(TAG, e.getMessage());
+                        registered=!registered;
+                    }
+                }
+                else {
+                    Log.e(TAG, "registered");
+                    registerReceiver(dialReceiver, new IntentFilter(Intent.ACTION_NEW_OUTGOING_CALL));
+                    registered=!registered;
+                }
+
             }
         });
 
