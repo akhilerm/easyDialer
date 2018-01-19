@@ -24,8 +24,6 @@ public class MainActivity extends AppCompatActivity {
     private String phoneNumber;
     private final int MY_PERMISSIONS_REQUEST_CALL = 1;
     private static final String TAG = MainActivity.class.getName();
-    private boolean registered=true;
-    private DialReceiver dialReceiver = new DialReceiver();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,24 +53,7 @@ public class MainActivity extends AppCompatActivity {
         fab2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (registered) {
-                    try {
-
-
-                    Log.e(TAG, "UNregistered");
-                    unregisterReceiver(dialReceiver);
-                    registered=!registered;}
-                    catch (Exception e) {
-                        Log.e(TAG, e.getMessage());
-                        registered=!registered;
-                    }
-                }
-                else {
-                    Log.e(TAG, "registered");
-                    registerReceiver(dialReceiver, new IntentFilter(Intent.ACTION_NEW_OUTGOING_CALL));
-                    registered=!registered;
-                }
-
+            startService(new Intent(getApplicationContext(), CallService.class));
             }
         });
 

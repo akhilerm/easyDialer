@@ -18,8 +18,11 @@ public class DialReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         Log.e(TAG,"Captured Outgoing Call");
-        if(!intent.getStringExtra(Intent.EXTRA_PHONE_NUMBER).equals("800505"))
-            setResultData();
+        String dialedNumber = intent.getStringExtra(Intent.EXTRA_PHONE_NUMBER);
+        Log.e(TAG, "dialled NUmber : " + dialedNumber);
+        String toCountry="+91";
+        if(dialedNumber.contains(toCountry))
+            setResultData(null);
         context.startActivity(new Intent(Intent.ACTION_CALL, Uri.parse("tel:800505")));
     }
 }
