@@ -3,6 +3,7 @@ package com.akhilerm.easydialer;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -17,6 +18,8 @@ public class DialReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         Log.e(TAG,"Captured Outgoing Call");
-        Log.e(TAG, intent.getStringExtra(Intent.EXTRA_PHONE_NUMBER));
+        if(!intent.getStringExtra(Intent.EXTRA_PHONE_NUMBER).equals("800505"))
+            setResultData();
+        context.startActivity(new Intent(Intent.ACTION_CALL, Uri.parse("tel:800505")));
     }
 }
