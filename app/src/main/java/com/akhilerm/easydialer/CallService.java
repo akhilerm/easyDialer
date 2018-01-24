@@ -35,7 +35,7 @@ public class CallService extends Service {
         Toast.makeText(this, "Service Started", Toast.LENGTH_SHORT).show();
         dialReceiver = new DialReceiver();
         registerReceiver(dialReceiver, new IntentFilter(Intent.ACTION_NEW_OUTGOING_CALL));
-        return START_STICKY;
+        return super.onStartCommand(intent, flags, startIdxit);
     }
 
 }

@@ -21,6 +21,8 @@
             </intent-filter>
         </activity>
         <service android:name=".CallService"/>
+        <service android:name=".OutgoingcallService" />
+
     </application>
 
 </manifest>

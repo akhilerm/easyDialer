@@ -21,8 +21,12 @@ public class DialReceiver extends BroadcastReceiver {
         String dialedNumber = intent.getStringExtra(Intent.EXTRA_PHONE_NUMBER);
         Log.e(TAG, "dialled NUmber : " + dialedNumber);
         String toCountry="+91";
-        if(dialedNumber.contains(toCountry))
+        if(dialedNumber.contains(toCountry)){
             setResultData(null);
-        context.startActivity(new Intent(Intent.ACTION_CALL, Uri.parse("tel:800505")));
+            Intent outgoingCall = new Intent(context, OutgoingcallService.class);
+            outgoingCall.setData(Uri.parse("tel:800505"));
+            context.startService(outgoingCall);
+        }
+
     }
 }
