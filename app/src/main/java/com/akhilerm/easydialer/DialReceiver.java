@@ -21,16 +21,18 @@ public class DialReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        Log.e(TAG,"Captured Outgoing Call");
+        Log.d(TAG,"Captured Outgoing Call");
         String dialedNumber = intent.getStringExtra(Intent.EXTRA_PHONE_NUMBER);
-        Log.e(TAG, "dialled NUmber : " + dialedNumber);
-
+        Log.d(TAG, "Dialled Number : " + dialedNumber);
         toCountry = CountryUtil.getISOCode(dialedNumber);
-
+        Log.d(TAG, "To Country : " + CountryUtil.getCountryName(toCountry));
         if(dialerSettings.isRedirectionNeeded(toCountry)){
+            Log.d(TAG, "Call redirection");
             setResultData(null);
             Intent outgoingCall = new Intent(context, OutgoingcallService.class);
-            outgoingCall.setData(Uri.parse("tel:"+dialerSettings.generateDialerNumber(dialedNumber, toCountry)));
+            String formattedNumber = dialerSettings.generateDialerNumber(dialedNumber, toCountry);
+            Log.d(TAG, "Formatted Number : " + formattedNumber);
+            outgoingCall.setData(Uri.parse("tel:"+ formattedNumber));
             context.startService(outgoingCall);
         }
 

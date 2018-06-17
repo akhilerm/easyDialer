@@ -26,7 +26,7 @@ public class OutgoingcallService extends IntentService {
     @TargetApi(23)
     @Override
     protected void onHandleIntent(Intent intent) {
-        Log.e(TAG,"on handle inten");
+        Log.d(TAG,"on handle inten");
         Intent outgoingcall = new Intent(Intent.ACTION_CALL);
         outgoingcall.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         outgoingcall.setData(intent.getData());

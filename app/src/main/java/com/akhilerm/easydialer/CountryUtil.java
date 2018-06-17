@@ -10,7 +10,7 @@ public class CountryUtil {
        return 91;
     }
 
-    String getCountryName(int ISOCode) {
+    static String getCountryName(int ISOCode) {
         return "India";
     }
 }
