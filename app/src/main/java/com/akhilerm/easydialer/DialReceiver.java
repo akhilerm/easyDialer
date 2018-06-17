@@ -9,22 +9,28 @@ import android.widget.Toast;
 
 /**
  * Created by akhil on 23/12/17.
+ * Captures the outgoing call and redirects it
  */
 
 public class DialReceiver extends BroadcastReceiver {
 
     private static final String TAG = DialReceiver.class.getName();
 
+    private int toCountry;
+    private DialerSettings dialerSettings = new DialerSettings();
+
     @Override
     public void onReceive(Context context, Intent intent) {
         Log.e(TAG,"Captured Outgoing Call");
         String dialedNumber = intent.getStringExtra(Intent.EXTRA_PHONE_NUMBER);
         Log.e(TAG, "dialled NUmber : " + dialedNumber);
-        String toCountry="+91";
-        if(dialedNumber.contains(toCountry)){
+
+        toCountry = CountryUtil.getISOCode(dialedNumber);
+
+        if(dialerSettings.isRedirectionNeeded(toCountry)){
             setResultData(null);
             Intent outgoingCall = new Intent(context, OutgoingcallService.class);
-            outgoingCall.setData(Uri.parse("tel:800505"));
+            outgoingCall.setData(Uri.parse("tel:"+dialerSettings.generateDialerNumber(dialedNumber, toCountry)));
             context.startService(outgoingCall);
         }
 
