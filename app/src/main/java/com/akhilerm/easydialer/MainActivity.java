@@ -24,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
     private String phoneNumber;
     private final int MY_PERMISSIONS_REQUEST_CALL = 1;
     private static final String TAG = MainActivity.class.getName();
+    private boolean isPermissionAvailable = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,25 +33,18 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        final EditText PINNumber = (EditText) findViewById(R.id.phoneNumber);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                phoneNumber = PINNumber.getText().toString();
-                if (ContextCompat.checkSelfPermission(MainActivity.this,
-                        Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-                    ActivityCompat.requestPermissions(MainActivity.this,
-                            new String[]{Manifest.permission.CALL_PHONE},
-                            MY_PERMISSIONS_REQUEST_CALL);
-                } else {
-                    dialCall();
-                }
-            }
-        });
-        FloatingActionButton fab2 = (FloatingActionButton) findViewById(R.id.switchButton);
-        fab2.setOnClickListener(new View.OnClickListener() {
+        if (ContextCompat.checkSelfPermission(MainActivity.this,
+                Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(MainActivity.this,
+                    new String[]{Manifest.permission.CALL_PHONE},
+                    MY_PERMISSIONS_REQUEST_CALL);
+        } else {
+            isPermissionAvailable=true;
+        }
+
+        FloatingActionButton toggleButton = (FloatingActionButton) findViewById(R.id.toggleButton);
+        toggleButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
             startService(new Intent(getApplicationContext(), CallService.class));
@@ -90,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
-                    dialCall();
+                    isPermissionAvailable = true;
 
                 } else {
 
@@ -104,12 +98,4 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void dialCall() {
-        if(!TextUtils.isEmpty(phoneNumber)) {
-            String dial = "tel:" + phoneNumber;
-            startActivity(new Intent(Intent.ACTION_NEW_OUTGOING_CALL, Uri.parse(dial)));
-        }else {
-            Toast.makeText(MainActivity.this, "Enter a phone number", Toast.LENGTH_SHORT).show();
-        }
-    }
 }
