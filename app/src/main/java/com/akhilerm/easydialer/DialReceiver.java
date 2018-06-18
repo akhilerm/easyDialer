@@ -16,11 +16,12 @@ public class DialReceiver extends BroadcastReceiver {
 
     private static final String TAG = DialReceiver.class.getName();
 
-    private int toCountry;
-    private DialerSettings dialerSettings = new DialerSettings();
+    private String toCountry;
+    private DialerSettings dialerSettings;
 
     @Override
     public void onReceive(Context context, Intent intent) {
+        dialerSettings = new DialerSettings(context);
         Log.d(TAG,"Captured Outgoing Call");
         String dialedNumber = intent.getStringExtra(Intent.EXTRA_PHONE_NUMBER);
         Log.d(TAG, "Dialled Number : " + dialedNumber);

@@ -4,8 +4,6 @@ import java.util.HashMap;
 
 public class CountryUtil {
 
-    private
-
     static String getISOCode(String phoneNumber) {
         phoneNumber.replace("+","");
         if (phoneNumber.startsWith("91"))

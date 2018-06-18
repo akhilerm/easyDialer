@@ -21,7 +21,6 @@ import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
-    private String phoneNumber;
     private final int MY_PERMISSIONS_REQUEST_CALL = 1;
     private static final String TAG = MainActivity.class.getName();
     private boolean isPermissionAvailable = false;
