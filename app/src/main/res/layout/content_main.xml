@@ -7,5 +7,23 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.akhilerm.easydialer.MainActivity"
     tools:showIn="@layout/activity_main">
-    
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/DialerNumber"
+        android:inputType="number"/>
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/PINNumber"
+        android:inputType="number"/>
+    <Spinner
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/Language"/>
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/Countries"/>
 </android.support.constraint.ConstraintLayout>
