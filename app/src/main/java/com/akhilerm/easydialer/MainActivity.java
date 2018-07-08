@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
@@ -46,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
         toggleButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-            startService(new Intent(getApplicationContext(), CallService.class));
+            startCallService();
             }
         });
 
@@ -96,5 +97,12 @@ public class MainActivity extends AppCompatActivity {
             // permissions this app might request
         }
     }
-
+    private void startCallService(){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            getApplicationContext().startForegroundService(new Intent(getApplicationContext(), CallService.class));
+        }
+        else {
+            getApplicationContext().startService(new Intent(getApplicationContext(), CallService.class));
+        }
+    }
 }

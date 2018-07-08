@@ -6,7 +6,7 @@ public class CountryUtil {
 
     static String getISOCode(String phoneNumber) {
         phoneNumber.replace("+","");
-        if (phoneNumber.startsWith("91"))
+        if (phoneNumber.startsWith("91")||phoneNumber.startsWith("0091"))
             return "IN";
         return "IN";
     }
