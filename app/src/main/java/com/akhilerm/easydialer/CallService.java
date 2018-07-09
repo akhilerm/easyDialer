@@ -28,7 +28,22 @@ public class CallService extends Service {
 
     @Override
     public void onCreate() {
-
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            Intent notificationIntent = new Intent(this, DialReceiver.class);
+            PendingIntent pendingIntent= PendingIntent.getActivity(this,0,notificationIntent,0);
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "101")
+                    .setSmallIcon(R.drawable.ic_launcher_foreground)
+                    .setContentTitle("TEST")
+                    .setContentText("HELLO")
+                    .setTicker("TICKER")
+                    .setContentIntent(pendingIntent);
+            Notification notification=builder.build();
+            NotificationChannel channel = new NotificationChannel("101", "easy Dialer", NotificationManager.IMPORTANCE_DEFAULT);
+            channel.setDescription("TEst channel");
+            NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            notificationManager.createNotificationChannel(channel);
+            startForeground(101, notification);
+        }
     }
 
     @Override
@@ -42,24 +57,7 @@ public class CallService extends Service {
         Toast.makeText(this, "easyDialer activated", Toast.LENGTH_SHORT).show();
         dialReceiver = new DialReceiver();
         this.registerReceiver(dialReceiver, new IntentFilter(Intent.ACTION_NEW_OUTGOING_CALL));
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            Intent notificationIntent = new Intent(this, MainActivity.class);
-            PendingIntent pendingIntent= PendingIntent.getActivity(this,0,notificationIntent,0);
-            NotificationCompat.Builder builder = new NotificationCompat.Builder(this,"101")
-                    .setSmallIcon(R.drawable.ic_launcher_foreground)
-                    .setContentTitle("TEST")
-                    .setContentText("HELLO")
-                    .setTicker("TICKER")
-                    .setContentIntent(pendingIntent);
-            Notification notification=builder.build();
-            if(Build.VERSION.SDK_INT>=26) {
-                NotificationChannel channel = new NotificationChannel("101", "easy Dialer", NotificationManager.IMPORTANCE_DEFAULT);
-                channel.setDescription("TEst channel");
-                NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-                notificationManager.createNotificationChannel(channel);
-            }
-            startForeground(101, notification);
-        }
+
         return super.onStartCommand(intent, flags, startIdxit);
     }
 
