@@ -25,7 +25,7 @@ public class DialerSettings {
         dialerNumber = settingsData.getString(DIALER_NUMBER, "800505");
         PINNumber = settingsData.getString(PIN_NUMBER, "");
         dialerLanguage = settingsData.getInt(DIALER_LANGUAGE, 9);
-        countries = settingsData.getString(COUNTRIES,"").split(",");
+        countries = settingsData.getString(COUNTRIES,"IN").split(",");
     }
 
     boolean isRedirectionNeeded(String ISOCode) {
@@ -48,8 +48,8 @@ public class DialerSettings {
      */
     private String cleanNumber(String phoneNumber, String ISOCode) {
         int ISDCode = CountryUtil.getISDCode(ISOCode);
-        phoneNumber.replace("+","");
-        phoneNumber.replace(CountryUtil.getISDCode(ISOCode)+"","");
+        phoneNumber=phoneNumber.replace("+","");
+        phoneNumber=phoneNumber.replace(CountryUtil.getISDCode(ISOCode)+"","");
         phoneNumber = "00" + CountryUtil.getISDCode(ISOCode) + phoneNumber;
         return phoneNumber;
     }

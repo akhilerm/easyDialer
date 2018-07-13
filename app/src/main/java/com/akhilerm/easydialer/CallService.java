@@ -29,7 +29,7 @@ public class CallService extends Service {
     @Override
     public void onCreate() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            Intent notificationIntent = new Intent(this, DialReceiver.class);
+            Intent notificationIntent = new Intent(this, MainActivity.class);
             PendingIntent pendingIntent= PendingIntent.getActivity(this,0,notificationIntent,0);
             NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "101")
                     .setSmallIcon(R.drawable.ic_launcher_foreground)
@@ -42,7 +42,7 @@ public class CallService extends Service {
             channel.setDescription("TEst channel");
             NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
             notificationManager.createNotificationChannel(channel);
-            startForeground(101, notification);
+            startForeground(1001, notification);
         }
     }
 

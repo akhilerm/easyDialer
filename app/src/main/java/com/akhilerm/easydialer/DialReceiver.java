@@ -27,6 +27,7 @@ public class DialReceiver extends BroadcastReceiver {
         Log.d(TAG, "Dialled Number : " + dialedNumber);
         toCountry = CountryUtil.getISOCode(dialedNumber);
         Log.d(TAG, "To Country : " + CountryUtil.getCountryName(toCountry));
+        Log.d(TAG, "is Direction : " + dialerSettings.isRedirectionNeeded(toCountry));
         if(dialerSettings.isRedirectionNeeded(toCountry)){
             Log.d(TAG, "Call redirection");
             setResultData(null);
