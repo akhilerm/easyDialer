@@ -18,7 +18,9 @@ import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
@@ -37,6 +39,19 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        //
+        Spinner card = (Spinner)findViewById(R.id.card);
+        String[] cardarray = {"Five Card", "Hello Card"};
+        ArrayAdapter<String> cardadapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, cardarray);
+        card.setAdapter(cardadapter);
+        //
+        Spinner language = (Spinner)findViewById(R.id.Language);
+        String[] langarray = {"English", "Malayalam"};
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item,
+                langarray);
+
+        language.setAdapter(adapter);
 
 
         if (ContextCompat.checkSelfPermission(MainActivity.this,
