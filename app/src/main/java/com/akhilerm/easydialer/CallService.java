@@ -11,6 +11,7 @@ import android.content.IntentFilter;
 import android.os.Build;
 import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
+import android.util.Log;
 import android.widget.Toast;
 
 /**
@@ -19,7 +20,9 @@ import android.widget.Toast;
 
 public class CallService extends Service {
 
+    private static final String TAG = CallService.class.getName();
     private static DialReceiver dialReceiver;
+    public static boolean isRunning = false;
 
     @Override
     public IBinder onBind(Intent intent){
@@ -35,7 +38,6 @@ public class CallService extends Service {
                     .setSmallIcon(R.drawable.ic_launcher_foreground)
                     .setContentTitle("TEST")
                     .setContentText("HELLO")
-                    .setTicker("TICKER")
                     .setContentIntent(pendingIntent);
             Notification notification=builder.build();
             NotificationChannel channel = new NotificationChannel("101", "easy Dialer", NotificationManager.IMPORTANCE_DEFAULT);
@@ -44,19 +46,22 @@ public class CallService extends Service {
             notificationManager.createNotificationChannel(channel);
             startForeground(1001, notification);
         }
+        Toast.makeText(this, "easyDialer activated", Toast.LENGTH_SHORT).show();
+        dialReceiver = new DialReceiver();
+        this.registerReceiver(dialReceiver, new IntentFilter(Intent.ACTION_NEW_OUTGOING_CALL));
     }
 
     @Override
     public void onDestroy() {
         Toast.makeText(this, "easyDialer deactivated", Toast.LENGTH_SHORT).show();
+        isRunning = false;
         unregisterReceiver(dialReceiver);
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startIdxit) {
-        Toast.makeText(this, "easyDialer activated", Toast.LENGTH_SHORT).show();
-        dialReceiver = new DialReceiver();
-        this.registerReceiver(dialReceiver, new IntentFilter(Intent.ACTION_NEW_OUTGOING_CALL));
+        Log.d(TAG, "Service started");
+        isRunning=true;
 
         return super.onStartCommand(intent, flags, startIdxit);
     }

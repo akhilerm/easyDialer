@@ -1,6 +1,7 @@
 package com.akhilerm.easydialer;
 
 import android.Manifest;
+import android.annotation.TargetApi;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
@@ -29,6 +30,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            Toast.makeText(this, "App is yet to support Oreo", Toast.LENGTH_SHORT).show();
+            finishAndRemoveTask();
+        }
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -47,7 +52,11 @@ public class MainActivity extends AppCompatActivity {
         toggleButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-            startCallService();
+                if (CallService.isRunning) {
+                    stopService(new Intent(getApplicationContext(), CallService.class));
+                } else {
+                    startCallService();
+                }
             }
         });
 
