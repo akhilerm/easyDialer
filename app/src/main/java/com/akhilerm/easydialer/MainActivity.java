@@ -32,10 +32,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             Toast.makeText(this, "App is yet to support Oreo", Toast.LENGTH_SHORT).show();
             finishAndRemoveTask();
-        }
+        }*/
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
         if (ContextCompat.checkSelfPermission(MainActivity.this,
                 Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(MainActivity.this,
-                    new String[]{Manifest.permission.CALL_PHONE},
+                    new String[]{Manifest.permission.CALL_PHONE, Manifest.permission.PROCESS_OUTGOING_CALLS},
                     MY_PERMISSIONS_REQUEST_CALL);
         } else {
             isPermissionAvailable=true;
@@ -122,11 +122,11 @@ public class MainActivity extends AppCompatActivity {
         }
     }
     private void startCallService(){
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             getApplicationContext().startForegroundService(new Intent(getApplicationContext(), CallService.class));
         }
-        else {
+        else {*/
             getApplicationContext().startService(new Intent(getApplicationContext(), CallService.class));
-        }
+        //}
     }
 }
