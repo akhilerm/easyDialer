@@ -32,10 +32,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            Toast.makeText(this, "App is yet to support Oreo", Toast.LENGTH_SHORT).show();
-            finishAndRemoveTask();
-        }*/
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -122,11 +118,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
     private void startCallService(){
-        /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            getApplicationContext().startForegroundService(new Intent(getApplicationContext(), CallService.class));
-        }
-        else {*/
             getApplicationContext().startService(new Intent(getApplicationContext(), CallService.class));
-        //}
     }
 }
