@@ -79,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
 //                        language.getSelectedItemPosition(),
                         4,
                         CountryUtil.getCountryArray(countries.getText().toString()));
+                Toast.makeText(MainActivity.this, "Settings Saved", Toast.LENGTH_SHORT).show();
             }
         });
 
