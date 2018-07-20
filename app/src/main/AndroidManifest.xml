@@ -24,12 +24,6 @@
         </activity>
         <service android:name=".CallService"/>
         <service android:name=".OutgoingcallService" />
-        <!--<receiver android:name=".DialReceiver"  android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.NEW_OUTGOING_CALL"/>
-            </intent-filter>
-        </receiver>-->
-
     </application>
 
 </manifest>

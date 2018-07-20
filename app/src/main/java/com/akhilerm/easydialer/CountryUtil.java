@@ -24,4 +24,8 @@ public class CountryUtil {
         }
         return "NOt found";
     }
+
+    static String[] getCountryArray(String countries) {
+        return countries.split(",");
+    }
 }

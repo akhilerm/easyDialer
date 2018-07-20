@@ -2,6 +2,7 @@ package com.akhilerm.easydialer;
 import android.annotation.TargetApi;
 import android.app.IntentService;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.IBinder;
 import android.telecom.InCallService;
 import android.util.Log;
@@ -27,7 +28,7 @@ public class OutgoingcallService extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent) {
         Log.d(TAG,"on handle inten");
-        Intent outgoingcall = new Intent(Intent.ACTION_CALL);
+        Intent outgoingcall = new Intent("android.intent.action.CALL");
         outgoingcall.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         outgoingcall.setData(intent.getData());
         startActivity(outgoingcall);

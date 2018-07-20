@@ -22,7 +22,6 @@ public class CallService extends Service {
 
     private static final String TAG = CallService.class.getName();
     private static DialReceiver dialReceiver;
-    public static boolean isRunning = false;
 
     @Override
     public IBinder onBind(Intent intent){
@@ -36,8 +35,8 @@ public class CallService extends Service {
             PendingIntent pendingIntent= PendingIntent.getActivity(this,0,notificationIntent,0);
             NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "101")
                     .setSmallIcon(R.drawable.ic_launcher_foreground)
-                    .setContentTitle("TEST")
-                    .setContentText("HELLO")
+                    .setContentTitle("easyDialer is Active")
+                    .setContentText("Calls are being rerouted")
                     .setContentIntent(pendingIntent);
             Notification notification=builder.build();
             NotificationChannel channel = new NotificationChannel("101", "easy Dialer", NotificationManager.IMPORTANCE_DEFAULT);
@@ -59,7 +58,6 @@ public class CallService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startIdxit) {
         Log.d(TAG, "Service started");
-        isRunning=true;
         Toast.makeText(this, "easyDialer activated", Toast.LENGTH_SHORT).show();
         dialReceiver = new DialReceiver();
         this.registerReceiver(dialReceiver, new IntentFilter(Intent.ACTION_NEW_OUTGOING_CALL));
@@ -69,7 +67,6 @@ public class CallService extends Service {
     @Override
     public boolean stopService(Intent intent) {
         Toast.makeText(this, "easyDialer deactivated", Toast.LENGTH_SHORT).show();
-        isRunning = false;
         unregisterReceiver(dialReceiver);
         return true;
     }

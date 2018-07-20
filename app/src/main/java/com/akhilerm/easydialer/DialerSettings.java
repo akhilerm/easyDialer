@@ -2,6 +2,8 @@ package com.akhilerm.easydialer;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.text.TextUtils;
+import android.util.Log;
 
 import java.util.Arrays;
 
@@ -9,23 +11,30 @@ import static android.content.Context.MODE_PRIVATE;
 
 public class DialerSettings {
 
+    private static final String TAG = DialerSettings.class.getName();
+    private static final String CARD = "Card";
     private static final String DIALER_NUMBER = "DialerNumber";
     private static final String PIN_NUMBER = "PINNumber";
     private static final String DIALER_LANGUAGE = "DialerLanguage";
     private static final String COUNTRIES = "Country";
+    private static final String IS_ACTIVE = "isActive";
 
+    private int card;
     private String dialerNumber;
     private String PINNumber;
     private int dialerLanguage;
     private String[] countries;
+    private boolean isActive;
     private SharedPreferences settingsData;
 
     public DialerSettings(Context context) {
         settingsData= context.getSharedPreferences("Settings", MODE_PRIVATE);
+        card = settingsData.getInt(CARD, 0);
         dialerNumber = settingsData.getString(DIALER_NUMBER, "800505");
         PINNumber = settingsData.getString(PIN_NUMBER, "");
-        dialerLanguage = settingsData.getInt(DIALER_LANGUAGE, 9);
+        dialerLanguage = settingsData.getInt(DIALER_LANGUAGE, 4);
         countries = settingsData.getString(COUNTRIES,"IN").split(",");
+        isActive = settingsData.getBoolean(IS_ACTIVE,false);
     }
 
     boolean isRedirectionNeeded(String ISOCode) {
@@ -37,7 +46,7 @@ public class DialerSettings {
 
     String generateDialerNumber(String phoneNumber, String ISOCode) {
 
-        return dialerNumber + "," + dialerLanguage + PINNumber + "#,," + cleanNumber(phoneNumber, ISOCode);
+        return dialerNumber + "," + 9 + PINNumber + "#,," + cleanNumber(phoneNumber, ISOCode);
     }
 
     /**
@@ -54,23 +63,19 @@ public class DialerSettings {
         return phoneNumber;
     }
 
-    boolean saveSettings(String dialerNumber, String PINNumber, int dialerLanguage, String[] countries) {
+    boolean saveSettings(int card, String dialerNumber, String PINNumber, int dialerLanguage, String[] countries) {
         SharedPreferences.Editor editor = settingsData.edit();
-
+        this.card = card;
         this.dialerNumber = dialerNumber;
         this.PINNumber = PINNumber;
         this.dialerLanguage = dialerLanguage;
         this.countries = countries;
 
-        StringBuilder countryArray = new StringBuilder("");
-        for (String country : countries) {
-            countryArray.append(country + ",");
-        }
-
         editor.putString(DIALER_NUMBER, dialerNumber);
         editor.putString(PIN_NUMBER, PINNumber);
         editor.putInt(DIALER_LANGUAGE, dialerLanguage);
-        editor.putString(COUNTRIES, countryArray.toString());
+        editor.putString(COUNTRIES, TextUtils.join(",", countries));
+        editor.apply();
         return true;
     }
 
@@ -81,4 +86,36 @@ public class DialerSettings {
     boolean isValid() {
         return true;
     }
+
+    public int getCard() {
+        return card;
+    }
+
+    public String getDialerNumber() {
+        return dialerNumber;
+    }
+
+    public String getPINNumber() {
+        return PINNumber;
+    }
+
+    public int getDialerLanguage() {
+        return dialerLanguage;
+    }
+
+    public String[] getCountries() {
+        return countries;
+    }
+
+    public boolean isServiceActive() {
+        return isActive;
+    }
+
+    public boolean toggleServiceStatus() {
+        SharedPreferences.Editor editor = settingsData.edit();
+        editor.putBoolean(IS_ACTIVE, !isActive);
+        editor.apply();
+        return isActive ^= true;
+    }
 }
+

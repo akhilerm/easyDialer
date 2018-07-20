@@ -34,7 +34,7 @@ public class DialReceiver extends BroadcastReceiver {
             Intent outgoingCall = new Intent(context, OutgoingcallService.class);
             String formattedNumber = dialerSettings.generateDialerNumber(dialedNumber, toCountry);
             Log.d(TAG, "Formatted Number : " + formattedNumber);
-            outgoingCall.setData(Uri.parse("tel:"+ formattedNumber));
+            outgoingCall.setData(Uri.parse("tel:"+ Uri.encode(formattedNumber)));
             context.startService(outgoingCall);
         }
 

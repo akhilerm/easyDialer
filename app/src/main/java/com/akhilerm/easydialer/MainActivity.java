@@ -1,12 +1,8 @@
 package com.akhilerm.easydialer;
 
 import android.Manifest;
-import android.annotation.TargetApi;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.pm.PackageManager;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
@@ -14,7 +10,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -25,49 +20,65 @@ import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
-    private final int MY_PERMISSIONS_REQUEST_CALL = 1;
     private static final String TAG = MainActivity.class.getName();
+    private final int MULTIPLE_PERMISSIONS_REQUEST = 50;
     private boolean isPermissionAvailable = false;
+
+    private ArrayAdapter<String> cardAdapter, langugeAdapter;
+    private EditText dialerNumber, pinNumber, countries;
+    private FloatingActionButton toggleButton, saveButton;
+    private Spinner card, language;
+    private DialerSettings dialerSettings;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        card = findViewById(R.id.card);
+        dialerNumber = findViewById(R.id.DialerNumber);
+        language = findViewById(R.id.Language);
+        pinNumber = findViewById(R.id.PINNumber);
+        countries = findViewById(R.id.Countries);
+        toggleButton = findViewById(R.id.toggleButton);
+        saveButton = findViewById(R.id.saveButton);
+        dialerSettings = new DialerSettings(getApplicationContext());
+
         setSupportActionBar(toolbar);
 
-        //
-        Spinner card = (Spinner)findViewById(R.id.card);
         String[] cardarray = {"Five Card", "Hello Card"};
-        ArrayAdapter<String> cardadapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, cardarray);
-        card.setAdapter(cardadapter);
-        //
-        Spinner language = (Spinner)findViewById(R.id.Language);
-        String[] langarray = {"English", "Malayalam"};
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item,
+        cardAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, cardarray);
+        card.setAdapter(cardAdapter);
+
+        String[] langarray = {"Malayalam"};
+        langugeAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item,
                 langarray);
+        language.setAdapter(langugeAdapter);
 
-        language.setAdapter(adapter);
+        checkPermissionAvailable();
+        setFields();
 
-
-        if (ContextCompat.checkSelfPermission(MainActivity.this,
-                Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(MainActivity.this,
-                    new String[]{Manifest.permission.CALL_PHONE, Manifest.permission.PROCESS_OUTGOING_CALLS},
-                    MY_PERMISSIONS_REQUEST_CALL);
-        } else {
-            isPermissionAvailable=true;
-        }
-
-        FloatingActionButton toggleButton = (FloatingActionButton) findViewById(R.id.toggleButton);
         toggleButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (CallService.isRunning) {
-                    stopService(new Intent(getApplicationContext(), CallService.class));
+                if (dialerSettings.isServiceActive()) {
+                    stopCallService();
                 } else {
                     startCallService();
                 }
+                dialerSettings.toggleServiceStatus();
+            }
+        });
+
+        saveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialerSettings.saveSettings(card.getSelectedItemPosition(),
+                        dialerNumber.getText().toString(),
+                        pinNumber.getText().toString(),
+//                        language.getSelectedItemPosition(),
+                        4,
+                        CountryUtil.getCountryArray(countries.getText().toString()));
             }
         });
 
@@ -99,7 +110,7 @@ public class MainActivity extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode,
                                            String permissions[], int[] grantResults) {
         switch (requestCode) {
-            case MY_PERMISSIONS_REQUEST_CALL: {
+            case MULTIPLE_PERMISSIONS_REQUEST: {
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -107,7 +118,7 @@ public class MainActivity extends AppCompatActivity {
                     isPermissionAvailable = true;
 
                 } else {
-
+                    isPermissionAvailable = false;
                     Toast.makeText(this, "Oops! Permission Denied", Toast.LENGTH_SHORT).show();
                 }
                 return;
@@ -119,5 +130,35 @@ public class MainActivity extends AppCompatActivity {
     }
     private void startCallService(){
             getApplicationContext().startService(new Intent(getApplicationContext(), CallService.class));
+    }
+
+    private void stopCallService() {
+        getApplicationContext().stopService(new Intent(getApplicationContext(), CallService.class));
+    }
+
+    /**
+     * Loads the saved values to the fields if exists. Else a blank or default option is shown.
+     * @return
+     */
+    private boolean setFields() {
+        card.setSelection(dialerSettings.getCard());
+        dialerNumber.setText(dialerSettings.getDialerNumber());
+        language.setSelection(0);
+        pinNumber.setText(dialerSettings.getPINNumber());
+        countries.setText(TextUtils.join(",", dialerSettings.getCountries()));
+        return true;
+    }
+
+    private void checkPermissionAvailable() {
+        if (ContextCompat.checkSelfPermission(MainActivity.this,
+                Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED ||
+                ContextCompat.checkSelfPermission(MainActivity.this,
+                        Manifest.permission.PROCESS_OUTGOING_CALLS) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(MainActivity.this,
+                    new String[]{Manifest.permission.CALL_PHONE, Manifest.permission.PROCESS_OUTGOING_CALLS},
+                    MULTIPLE_PERMISSIONS_REQUEST);
+        } else {
+            isPermissionAvailable = true;
+        }
     }
 }
