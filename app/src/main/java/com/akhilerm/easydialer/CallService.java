@@ -66,6 +66,7 @@ public class CallService extends Service {
 
     @Override
     public boolean stopService(Intent intent) {
+        Log.d(TAG, "Service stopped");
         unregisterReceiver(dialReceiver);
         return true;
     }
