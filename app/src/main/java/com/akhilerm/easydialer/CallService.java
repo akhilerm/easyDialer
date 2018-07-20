@@ -58,7 +58,6 @@ public class CallService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startIdxit) {
         Log.d(TAG, "Service started");
-        Toast.makeText(this, "easyDialer activated", Toast.LENGTH_SHORT).show();
         dialReceiver = new DialReceiver();
         this.registerReceiver(dialReceiver, new IntentFilter(Intent.ACTION_NEW_OUTGOING_CALL));
         return super.onStartCommand(intent, flags, startIdxit);
@@ -66,7 +65,6 @@ public class CallService extends Service {
 
     @Override
     public boolean stopService(Intent intent) {
-        Toast.makeText(this, "easyDialer deactivated", Toast.LENGTH_SHORT).show();
         unregisterReceiver(dialReceiver);
         return true;
     }

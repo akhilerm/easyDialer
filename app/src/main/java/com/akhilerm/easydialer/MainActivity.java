@@ -129,10 +129,12 @@ public class MainActivity extends AppCompatActivity {
         }
     }
     private void startCallService(){
-            getApplicationContext().startService(new Intent(getApplicationContext(), CallService.class));
+        Toast.makeText(this, "easyDialer activated", Toast.LENGTH_SHORT).show();
+        getApplicationContext().startService(new Intent(getApplicationContext(), CallService.class));
     }
 
     private void stopCallService() {
+        Toast.makeText(this, "easyDialer deactivated", Toast.LENGTH_SHORT).show();
         getApplicationContext().stopService(new Intent(getApplicationContext(), CallService.class));
     }
 
