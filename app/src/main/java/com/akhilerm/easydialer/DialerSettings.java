@@ -32,9 +32,12 @@ public class DialerSettings {
         card = settingsData.getInt(CARD, 0);
         dialerNumber = settingsData.getString(DIALER_NUMBER, "800505");
         PINNumber = settingsData.getString(PIN_NUMBER, "");
-        dialerLanguage = settingsData.getInt(DIALER_LANGUAGE, 4);
+        dialerLanguage = settingsData.getInt(DIALER_LANGUAGE, 9);
         countries = settingsData.getString(COUNTRIES,"IN").split(",");
         isActive = settingsData.getBoolean(IS_ACTIVE,false);
+        if (!dialerNumber.equals("800505")) {
+            dialerLanguage = 2;
+        }
     }
 
     boolean isRedirectionNeeded(String ISOCode) {
@@ -46,7 +49,7 @@ public class DialerSettings {
 
     String generateDialerNumber(String phoneNumber, String ISOCode) {
 
-        return dialerNumber + "," + 9 + PINNumber + "#,," + cleanNumber(phoneNumber, ISOCode);
+        return dialerNumber + "," + dialerLanguage + PINNumber + "#,," + cleanNumber(phoneNumber, ISOCode);
     }
 
     /**
@@ -84,6 +87,9 @@ public class DialerSettings {
      * @return
      */
     boolean isValid() {
+        if (TextUtils.isEmpty(PINNumber)) {
+            return false;
+        }
         return true;
     }
 

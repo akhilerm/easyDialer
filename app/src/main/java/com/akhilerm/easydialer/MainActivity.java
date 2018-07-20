@@ -130,8 +130,16 @@ public class MainActivity extends AppCompatActivity {
         }
     }
     private void startCallService(){
-        Toast.makeText(this, "easyDialer activated", Toast.LENGTH_SHORT).show();
-        getApplicationContext().startService(new Intent(getApplicationContext(), CallService.class));
+        String message = "";
+        if (!dialerSettings.isValid()) {
+            message = "Invalid settings detected";
+        } else if (!isPermissionAvailable) {
+            message = "Oops! No permission to activate";
+        } else {
+            getApplicationContext().startService(new Intent(getApplicationContext(), CallService.class));
+            message = "easyDialer activated";
+        }
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
     private void stopCallService() {
