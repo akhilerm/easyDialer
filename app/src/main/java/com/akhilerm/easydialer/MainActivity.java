@@ -129,6 +129,20 @@ public class MainActivity extends AppCompatActivity {
             // permissions this app might request
         }
     }
+    private void checkPermissionAvailable() {
+        if (ContextCompat.checkSelfPermission(MainActivity.this,
+                Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED ||
+                ContextCompat.checkSelfPermission(MainActivity.this,
+                        Manifest.permission.PROCESS_OUTGOING_CALLS) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(MainActivity.this,
+                    new String[]{Manifest.permission.CALL_PHONE,
+                            Manifest.permission.PROCESS_OUTGOING_CALLS},
+                    MULTIPLE_PERMISSIONS_REQUEST);
+        } else {
+            isPermissionAvailable = true;
+        }
+    }
+
     private void startCallService(){
         String message = "";
         if (!dialerSettings.isValid()) {
@@ -160,16 +174,4 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-    private void checkPermissionAvailable() {
-        if (ContextCompat.checkSelfPermission(MainActivity.this,
-                Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED ||
-                ContextCompat.checkSelfPermission(MainActivity.this,
-                        Manifest.permission.PROCESS_OUTGOING_CALLS) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(MainActivity.this,
-                    new String[]{Manifest.permission.CALL_PHONE, Manifest.permission.PROCESS_OUTGOING_CALLS},
-                    MULTIPLE_PERMISSIONS_REQUEST);
-        } else {
-            isPermissionAvailable = true;
-        }
-    }
 }
