@@ -1,7 +1,5 @@
 package com.akhilerm.easydialer;
 
-import java.util.HashMap;
-
 public class CountryUtil {
 
     static String getISOCode(String phoneNumber) {
