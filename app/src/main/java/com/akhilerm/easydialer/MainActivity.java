@@ -133,10 +133,14 @@ public class MainActivity extends AppCompatActivity {
         if (ContextCompat.checkSelfPermission(MainActivity.this,
                 Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED ||
                 ContextCompat.checkSelfPermission(MainActivity.this,
-                        Manifest.permission.PROCESS_OUTGOING_CALLS) != PackageManager.PERMISSION_GRANTED) {
+                        Manifest.permission.PROCESS_OUTGOING_CALLS) != PackageManager.PERMISSION_GRANTED ||
+                ContextCompat.checkSelfPermission(MainActivity.this,
+                        Manifest.permission.READ_CALL_LOG) != PackageManager.PERMISSION_GRANTED ||
+                ContextCompat.checkSelfPermission(MainActivity.this,
+                        Manifest.permission.WRITE_CALL_LOG) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(MainActivity.this,
                     new String[]{Manifest.permission.CALL_PHONE,
-                            Manifest.permission.PROCESS_OUTGOING_CALLS},
+                            Manifest.permission.PROCESS_OUTGOING_CALLS,Manifest.permission.READ_CALL_LOG, Manifest.permission.WRITE_CALL_LOG},
                     MULTIPLE_PERMISSIONS_REQUEST);
         } else {
             isPermissionAvailable = true;
