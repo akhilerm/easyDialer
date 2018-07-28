@@ -5,16 +5,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.util.Log;
-import android.widget.Toast;
 
 /**
  * Created by akhil on 23/12/17.
- * Captures the outgoing call and redirects it
+ * Captures the phone call states and perform related actions
  */
 
-public class DialReceiver extends BroadcastReceiver {
+public class PhoneCallReceiver extends BroadcastReceiver {
 
-    private static final String TAG = DialReceiver.class.getName();
+    private static final String TAG = PhoneCallReceiver.class.getName();
 
     private String toCountry;
     private DialerSettings dialerSettings;

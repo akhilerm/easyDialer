@@ -22,7 +22,7 @@ import android.widget.Toast;
 public class CallService extends Service {
 
     private static final String TAG = CallService.class.getName();
-    private static DialReceiver dialReceiver;
+    private static PhoneCallReceiver phoneCallReceiver;
 
     @Override
     public IBinder onBind(Intent intent){
@@ -47,8 +47,8 @@ public class CallService extends Service {
             startForeground(1001, notification);
         }
         Toast.makeText(this, "easyDialer activated", Toast.LENGTH_SHORT).show();
-        dialReceiver = new DialReceiver();
-        this.registerReceiver(dialReceiver, new IntentFilter(Intent.ACTION_NEW_OUTGOING_CALL));
+        phoneCallReceiver = new PhoneCallReceiver();
+        this.registerReceiver(phoneCallReceiver, new IntentFilter(Intent.ACTION_NEW_OUTGOING_CALL));
     }
 
     @Override
@@ -59,15 +59,15 @@ public class CallService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startIdxit) {
         Log.d(TAG, "Service started");
-        dialReceiver = new DialReceiver();
-        this.registerReceiver(dialReceiver, new IntentFilter(Intent.ACTION_NEW_OUTGOING_CALL));
+        phoneCallReceiver = new PhoneCallReceiver();
+        this.registerReceiver(phoneCallReceiver, new IntentFilter(Intent.ACTION_NEW_OUTGOING_CALL));
         return super.onStartCommand(intent, flags, startIdxit);
     }
 
     @Override
     public boolean stopService(Intent intent) {
         Log.d(TAG, "Service stopped");
-        unregisterReceiver(dialReceiver);
+        unregisterReceiver(phoneCallReceiver);
         return true;
     }
 
