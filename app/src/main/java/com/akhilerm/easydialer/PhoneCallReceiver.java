@@ -3,7 +3,10 @@ package com.akhilerm.easydialer;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
+import android.os.Handler;
+import android.provider.CallLog;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.util.Log;
@@ -39,7 +42,7 @@ public class PhoneCallReceiver extends BroadcastReceiver {
             context.startService(outgoingCall);
         }
         TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-        CustomPhoneStateListener customPhoneStateListener = new CustomPhoneStateListener();
+        CustomPhoneStateListener customPhoneStateListener = new CustomPhoneStateListener(context);
         telephonyManager.listen(customPhoneStateListener, PhoneStateListener.LISTEN_CALL_STATE);
     }
 
@@ -47,6 +50,11 @@ public class PhoneCallReceiver extends BroadcastReceiver {
         private final String TAG = CustomPhoneStateListener.class.getName() + ":DEBUG:";
         private int previousState = TelephonyManager.CALL_STATE_IDLE;
         private boolean isIncoming;
+        private Context context;
+
+        CustomPhoneStateListener(Context context) {
+            this.context = context;
+        }
 
         @Override
         public void onCallStateChanged(int state, String phoneNumber) {
@@ -96,7 +104,19 @@ public class PhoneCallReceiver extends BroadcastReceiver {
 
 
         private void onOutgoingCallEnded(String number) {
-            // Code to edit call log
+            //to delay the query to URI, so that last data is fetched
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    // Magic here
+                }
+            }, 3000);
+            Cursor cursor = context.getContentResolver().query(CallLog.Calls.CONTENT_URI, null,
+                    CallLog.Calls.TYPE + " = " + CallLog.Calls.OUTGOING_TYPE,
+                    null,null);
+            cursor.moveToLast();
+            Log.d(TAG, "Last number = " + cursor.getString(cursor.getColumnIndex(CallLog.Calls.NUMBER)));
+
         }
     }
 
