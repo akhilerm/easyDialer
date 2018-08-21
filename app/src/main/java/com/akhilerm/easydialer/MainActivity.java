@@ -20,7 +20,7 @@ import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final String TAG = MainActivity.class.getName();
+    private static final String TAG = MainActivity.class.getName() + ":DEBUG:";
     private final int MULTIPLE_PERMISSIONS_REQUEST = 50;
     private boolean isPermissionAvailable = false;
 

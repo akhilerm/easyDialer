@@ -13,7 +13,7 @@ import android.util.Log;
  */
 
 public class OutgoingcallService extends IntentService {
-    private static final String TAG = OutgoingcallService.class.getName();
+    private static final String TAG = OutgoingcallService.class.getName() + ":DEBUG:";
     private InCallService inCallService;
 
     public OutgoingcallService (String name) {

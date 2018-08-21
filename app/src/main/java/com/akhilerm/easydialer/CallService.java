@@ -21,7 +21,7 @@ import android.widget.Toast;
 
 public class CallService extends Service {
 
-    private static final String TAG = CallService.class.getName();
+    private static final String TAG = CallService.class.getName() + ":DEBUG:";
     private static PhoneCallReceiver phoneCallReceiver;
 
     @Override

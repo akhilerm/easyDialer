@@ -11,7 +11,7 @@ import static android.content.Context.MODE_PRIVATE;
 
 public class DialerSettings {
 
-    private static final String TAG = DialerSettings.class.getName();
+    private static final String TAG = DialerSettings.class.getName() + ":DEBUG:";
     private static final String CARD = "Card";
     private static final String DIALER_NUMBER = "DialerNumber";
     private static final String PIN_NUMBER = "PINNumber";

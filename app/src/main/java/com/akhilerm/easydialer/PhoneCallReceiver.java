@@ -4,6 +4,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.telephony.PhoneStateListener;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 
 /**
@@ -13,14 +15,14 @@ import android.util.Log;
 
 public class PhoneCallReceiver extends BroadcastReceiver {
 
-    private static final String TAG = PhoneCallReceiver.class.getName();
+    private static final String TAG = PhoneCallReceiver.class.getName() + ":DEBUG:";
 
     private String toCountry;
     private DialerSettings dialerSettings;
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        dialerSettings = new DialerSettings(context);
+        /*dialerSettings = new DialerSettings(context);
         Log.d(TAG,"Captured Outgoing Call");
         String dialedNumber = intent.getStringExtra(Intent.EXTRA_PHONE_NUMBER);
         Log.d(TAG, "Dialled Number : " + dialedNumber);
@@ -35,7 +37,10 @@ public class PhoneCallReceiver extends BroadcastReceiver {
             Log.d(TAG, "Formatted Number : " + formattedNumber);
             outgoingCall.setData(Uri.parse("tel:"+ Uri.encode(formattedNumber)));
             context.startService(outgoingCall);
-        }
-
+        }*/
+        TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+        CustomPhoneStateListener customPhoneStateListener = new CustomPhoneStateListener(context);
+        telephonyManager.listen(customPhoneStateListener, PhoneStateListener.LISTEN_CALL_STATE);
     }
+
 }
