@@ -17,6 +17,7 @@ import android.telephony.TelephonyManager;
 import android.util.Log;
 
 import java.util.Locale;
+import java.util.UUID;
 
 /**
  * Created by akhil on 23/12/17.
@@ -48,9 +49,11 @@ public class PhoneCallReceiver extends BroadcastReceiver {
             outgoingCall.setData(Uri.parse("tel:"+ Uri.encode(formattedNumber)));
             context.startService(outgoingCall);
         }
-        TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-        CustomPhoneStateListener customPhoneStateListener = new CustomPhoneStateListener(context);
-        telephonyManager.listen(customPhoneStateListener, PhoneStateListener.LISTEN_CALL_STATE);
+        else {
+            TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+            CustomPhoneStateListener customPhoneStateListener = new CustomPhoneStateListener(context);
+            telephonyManager.listen(customPhoneStateListener, PhoneStateListener.LISTEN_CALL_STATE);
+        }
     }
 
     public class CustomPhoneStateListener extends PhoneStateListener {
@@ -126,14 +129,17 @@ public class PhoneCallReceiver extends BroadcastReceiver {
             cursor.moveToLast();
             DatabaseUtils.cursorRowToContentValues(cursor, contentValues);
             Log.d(TAG, "Last number = " + cursor.getString(cursor.getColumnIndex(CallLog.Calls.NUMBER)));
-            //delete
-            int rows = context.getContentResolver().delete(CallLog.Calls.CONTENT_URI,
-                    CallLog.Calls._ID + " = " + contentValues.get(CallLog.Calls._ID) + " " +
-                            "AND " + CallLog.Calls.DATE + "=" + contentValues.get(CallLog.Calls.DATE), null);
-            Log.d(TAG, "Deleted rows " + rows);
+
+
             //edit values
             String post_Dial_digits = contentValues.get(CallLog.Calls.POST_DIAL_DIGITS).toString();
-            String originalNumber = "+" + post_Dial_digits.substring(post_Dial_digits.lastIndexOf(',') + 1).substring(2);
+            Log.d(TAG, "post digits" + post_Dial_digits);
+            int pos = post_Dial_digits.lastIndexOf(',');
+            Log.d(TAG, "POS" + pos);
+            String number1 = post_Dial_digits.substring(pos+1);
+            Log.d(TAG, "Number 1" + number1);
+            String originalNumber = "+" + number1.substring(2);
+            Log.d(TAG, "Original Number " + originalNumber);
             int duration = Integer.parseInt(contentValues.get(CallLog.Calls.DURATION).toString())-40;
             String ISOCode = CountryUtil.getISOCode(originalNumber);
             contentValues.put(CallLog.Calls.DURATION, duration < 0 ? 0 : duration);
@@ -141,6 +147,12 @@ public class PhoneCallReceiver extends BroadcastReceiver {
             contentValues.put(CallLog.Calls.NUMBER, originalNumber);
             contentValues.put(CallLog.Calls.COUNTRY_ISO, ISOCode);
             contentValues.put(CallLog.Calls.GEOCODED_LOCATION, new Locale("",ISOCode).getDisplayCountry());
+
+            //delete
+            int rows = context.getContentResolver().delete(CallLog.Calls.CONTENT_URI,
+                    CallLog.Calls._ID + " = " + contentValues.get(CallLog.Calls._ID) + " " +
+                            "AND " + CallLog.Calls.DATE + "=" + contentValues.get(CallLog.Calls.DATE), null);
+            Log.d(TAG, "Deleted rows " + rows);
             //insert
 
             context.getContentResolver().insert(CallLog.Calls.CONTENT_URI, contentValues);
