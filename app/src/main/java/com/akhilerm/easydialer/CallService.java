@@ -48,7 +48,6 @@ public class CallService extends Service {
         }
         Toast.makeText(this, "easyDialer activated", Toast.LENGTH_SHORT).show();
         phoneCallReceiver = new PhoneCallReceiver();
-        this.registerReceiver(phoneCallReceiver, new IntentFilter(Intent.ACTION_NEW_OUTGOING_CALL));
     }
 
     @Override
