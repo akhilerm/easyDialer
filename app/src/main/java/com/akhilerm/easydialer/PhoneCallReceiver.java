@@ -1,15 +1,22 @@
 package com.akhilerm.easydialer;
 
 import android.content.BroadcastReceiver;
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.net.Uri;
 import android.os.Handler;
 import android.provider.CallLog;
+import android.telecom.Call;
+import android.telephony.PhoneNumberUtils;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.util.Log;
+
+import java.util.Locale;
 
 /**
  * Created by akhil on 23/12/17.
@@ -104,6 +111,7 @@ public class PhoneCallReceiver extends BroadcastReceiver {
 
 
         private void onOutgoingCallEnded(String number) {
+            if(!number.equals("800505")) return;
             //to delay the query to URI, so that last data is fetched
             new Handler().postDelayed(new Runnable() {
                 @Override
@@ -111,12 +119,31 @@ public class PhoneCallReceiver extends BroadcastReceiver {
                     // Magic here
                 }
             }, 3000);
+            ContentValues contentValues = new ContentValues();
             Cursor cursor = context.getContentResolver().query(CallLog.Calls.CONTENT_URI, null,
                     CallLog.Calls.TYPE + " = " + CallLog.Calls.OUTGOING_TYPE,
                     null,null);
             cursor.moveToLast();
+            DatabaseUtils.cursorRowToContentValues(cursor, contentValues);
             Log.d(TAG, "Last number = " + cursor.getString(cursor.getColumnIndex(CallLog.Calls.NUMBER)));
+            //delete
+            int rows = context.getContentResolver().delete(CallLog.Calls.CONTENT_URI,
+                    CallLog.Calls._ID + " = " + contentValues.get(CallLog.Calls._ID) + " " +
+                            "AND " + CallLog.Calls.DATE + "=" + contentValues.get(CallLog.Calls.DATE), null);
+            Log.d(TAG, "Deleted rows " + rows);
+            //edit values
+            String post_Dial_digits = contentValues.get(CallLog.Calls.POST_DIAL_DIGITS).toString();
+            String originalNumber = "+" + post_Dial_digits.substring(post_Dial_digits.lastIndexOf(',') + 1).substring(2);
+            int duration = Integer.parseInt(contentValues.get(CallLog.Calls.DURATION).toString())-40;
+            String ISOCode = CountryUtil.getISOCode(originalNumber);
+            contentValues.put(CallLog.Calls.DURATION, duration < 0 ? 0 : duration);
+            contentValues.put(CallLog.Calls.POST_DIAL_DIGITS, "");
+            contentValues.put(CallLog.Calls.NUMBER, originalNumber);
+            contentValues.put(CallLog.Calls.COUNTRY_ISO, ISOCode);
+            contentValues.put(CallLog.Calls.GEOCODED_LOCATION, new Locale("",ISOCode).getDisplayCountry());
+            //insert
 
+            context.getContentResolver().insert(CallLog.Calls.CONTENT_URI, contentValues);
         }
     }
 
