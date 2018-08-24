@@ -1,7 +1,6 @@
 package com.akhilerm.easydialer;
 
 import android.content.BroadcastReceiver;
-import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -30,6 +29,7 @@ public class PhoneCallReceiver extends BroadcastReceiver {
 
     private String toCountry;
     private DialerSettings dialerSettings;
+    static CustomPhoneStateListener customPhoneStateListener;
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -51,13 +51,15 @@ public class PhoneCallReceiver extends BroadcastReceiver {
         }
         else {
             TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-            CustomPhoneStateListener customPhoneStateListener = new CustomPhoneStateListener(context);
-            telephonyManager.listen(customPhoneStateListener, PhoneStateListener.LISTEN_CALL_STATE);
+            if (customPhoneStateListener == null) {
+                customPhoneStateListener = new CustomPhoneStateListener(context);
+                telephonyManager.listen(customPhoneStateListener, PhoneStateListener.LISTEN_CALL_STATE);
+            }
         }
     }
 
     public class CustomPhoneStateListener extends PhoneStateListener {
-        private final String TAG = CustomPhoneStateListener.class.getName() + ":DEBUG:";
+        private final String TAG = CustomPhoneStateListener.class.getName() +" "+ UUID.randomUUID().toString() +" :DEBUG:";
         private int previousState = TelephonyManager.CALL_STATE_IDLE;
         private boolean isIncoming;
         private Context context;
@@ -114,14 +116,14 @@ public class PhoneCallReceiver extends BroadcastReceiver {
 
 
         private void onOutgoingCallEnded(String number) {
-            if(!number.equals("800505")) return;
+            if(!number.equals(dialerSettings.getDialerNumber())) return;
             //to delay the query to URI, so that last data is fetched
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
                     // Magic here
                 }
-            }, 3000);
+            }, 5000);
             ContentValues contentValues = new ContentValues();
             Cursor cursor = context.getContentResolver().query(CallLog.Calls.CONTENT_URI, null,
                     CallLog.Calls.TYPE + " = " + CallLog.Calls.OUTGOING_TYPE,
