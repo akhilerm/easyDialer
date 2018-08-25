@@ -122,16 +122,12 @@ public class PhoneCallReceiver extends BroadcastReceiver {
                 @Override
                 public void run() {
                     // Magic here
-                }
-            }, 5000);
             ContentValues contentValues = new ContentValues();
             Cursor cursor = context.getContentResolver().query(CallLog.Calls.CONTENT_URI, null,
                     CallLog.Calls.TYPE + " = " + CallLog.Calls.OUTGOING_TYPE,
                     null,null);
             cursor.moveToLast();
             DatabaseUtils.cursorRowToContentValues(cursor, contentValues);
-            Log.d(TAG, "Last number = " + cursor.getString(cursor.getColumnIndex(CallLog.Calls.NUMBER)));
-
 
             //edit values
             String post_Dial_digits = contentValues.get(CallLog.Calls.POST_DIAL_DIGITS).toString();
@@ -158,6 +154,9 @@ public class PhoneCallReceiver extends BroadcastReceiver {
             //insert
 
             context.getContentResolver().insert(CallLog.Calls.CONTENT_URI, contentValues);
+                }
+            }, 1000);
+
         }
     }
 
