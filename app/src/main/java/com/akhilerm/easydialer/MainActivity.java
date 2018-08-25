@@ -34,7 +34,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = findViewById(R.id.toolbar);
         card = findViewById(R.id.card);
         dialerNumber = findViewById(R.id.DialerNumber);
         language = findViewById(R.id.Language);
@@ -43,8 +42,6 @@ public class MainActivity extends AppCompatActivity {
         toggleButton = findViewById(R.id.toggleButton);
         saveButton = findViewById(R.id.saveButton);
         dialerSettings = new DialerSettings(getApplicationContext());
-
-        setSupportActionBar(toolbar);
 
         String[] cardarray = {"Five Card", "Hello Card"};
         cardAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, cardarray);

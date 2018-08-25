@@ -7,39 +7,60 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.akhilerm.easydialer.MainActivity"
     tools:showIn="@layout/activity_main">
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
 
-    <Spinner
-        android:id="@+id/card"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        />
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/DialerNumber"
-        android:inputType="phone"/>
+        android:layout_height="match_parent"
+        android:background="@color/colorPrimary"
+        android:orientation="vertical"
+        tools:layout_editor_absoluteX="51dp"
+        tools:layout_editor_absoluteY="223dp">
 
-    <EditText
-        android:id="@+id/PINNumber"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="number"
-        />
+        <Spinner
+            android:id="@+id/card"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
-    <Spinner
-        android:id="@+id/Language"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        />
+        <EditText
+            android:id="@+id/DialerNumber"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="phone" />
 
-    <EditText
-        android:id="@+id/Countries"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        />
-</LinearLayout>
+        <EditText
+            android:id="@+id/PINNumber"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="number" />
+
+        <Spinner
+            android:id="@+id/Language"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <EditText
+            android:id="@+id/Countries"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="1234 4567 9658 2540"
+            android:textColor="@color/colorAccent"
+            android:layout_gravity="center"
+            android:textSize="30dp"
+            android:layout_marginBottom="40dp"/>
+
+        <Button
+            android:id="@+id/RenewButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@drawable/button"
+            android:text="Renew Card"
+            android:textColor="@android:color/white"
+            android:textSize="20dp"
+            android:layout_marginTop="20dp"/>
+    </LinearLayout>
 </android.support.constraint.ConstraintLayout>
