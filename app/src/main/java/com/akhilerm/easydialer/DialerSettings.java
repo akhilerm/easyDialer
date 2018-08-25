@@ -64,7 +64,7 @@ public class DialerSettings {
     private String cleanNumber(String phoneNumber, String ISOCode) {
         int ISDCode = CountryUtil.getISDCode(ISOCode);
         phoneNumber=phoneNumber.replace("+","");
-        phoneNumber=phoneNumber.replace(CountryUtil.getISDCode(ISOCode)+"","");
+        phoneNumber=phoneNumber.replaceFirst(CountryUtil.getISDCode(ISOCode)+"","");
         phoneNumber = "00" + CountryUtil.getISDCode(ISOCode) + phoneNumber;
         return phoneNumber;
     }
