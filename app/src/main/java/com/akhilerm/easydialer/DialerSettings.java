@@ -48,8 +48,11 @@ public class DialerSettings {
     }
 
     String generateDialerNumber(String phoneNumber, String ISOCode) {
-
-        return dialerNumber + "," + dialerLanguage + PINNumber + "#,," + cleanNumber(phoneNumber, ISOCode);
+        String finalNumber =dialerNumber + "," + dialerLanguage;
+        if (!dialerNumber.equals("800505")) {
+            finalNumber += ",";
+        }
+        return  finalNumber + PINNumber + "#,," + cleanNumber(phoneNumber, ISOCode);
     }
 
     /**
