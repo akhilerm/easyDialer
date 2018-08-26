@@ -116,6 +116,7 @@ public class PhoneCallReceiver extends BroadcastReceiver {
 
 
         private void onOutgoingCallEnded(String number) {
+            Log.d(TAG, "Dialer Number is " + dialerSettings.getDialerNumber());
             if(!number.equals(dialerSettings.getDialerNumber())) return;
             //to delay the query to URI, so that last data is fetched
             new Handler().postDelayed(new Runnable() {
