@@ -63,6 +63,7 @@
             android:textColor="@color/colorAccent"
             android:layout_gravity="center"
             android:textSize="30dp"
+            android:fontFamily="sans-serif-condensed"
             android:layout_marginBottom="40dp"/>
 
         <Button
@@ -74,6 +75,9 @@
             android:text="Renew Card"
             android:textColor="@android:color/white"
             android:textSize="20dp"
+            android:elevation="6dp"
+            android:translationZ="2dp"
+            android:stateListAnimator="@null"
             android:layout_marginTop="20dp"/>
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>
