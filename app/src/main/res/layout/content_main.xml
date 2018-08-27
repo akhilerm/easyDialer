@@ -16,30 +16,43 @@
         tools:layout_editor_absoluteX="51dp"
         tools:layout_editor_absoluteY="223dp">
 
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/settingsButton"
+            android:background="@drawable/ic_baseline_settings"
+            android:layout_gravity="top|right"
+            android:layout_margin="@dimen/fab_margin"/>
+
         <Spinner
             android:id="@+id/card"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:visibility="invisible"/>
 
         <EditText
             android:id="@+id/DialerNumber"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:visibility="invisible"
             android:inputType="phone" />
 
         <EditText
             android:id="@+id/PINNumber"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:visibility="invisible"
             android:inputType="number" />
 
         <Spinner
             android:id="@+id/Language"
+            android:visibility="invisible"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
         <EditText
             android:id="@+id/Countries"
+            android:visibility="invisible"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
