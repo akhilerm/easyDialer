@@ -19,6 +19,6 @@
 
     <size
         android:height="60dp"
-        android:width="270dp" />
+        android:width="270dp" />adb
 
 </shape>
