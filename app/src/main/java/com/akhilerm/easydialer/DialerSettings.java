@@ -12,18 +12,8 @@ import static android.content.Context.MODE_PRIVATE;
 public class DialerSettings {
 
     private static final String TAG = DialerSettings.class.getName() + ":DEBUG:";
-    private static final String CARD = "Card";
-    private static final String DIALER_NUMBER = "DialerNumber";
-    private static final String PIN_NUMBER = "PINNumber";
-    private static final String DIALER_LANGUAGE = "DialerLanguage";
-    private static final String COUNTRIES = "Country";
-    private static final String IS_ACTIVE = "isActive";
 
-    private int card;
-    private String dialerNumber;
-    private String PINNumber;
-    private int dialerLanguage;
-    private String[] countries;
+    private Card card;
     private boolean isActive;
     private SharedPreferences settingsData;
 

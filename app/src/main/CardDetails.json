@@ -1,0 +1,17 @@
+[{
+    "cardID" : 1,
+    "cardName" : "Five Card",
+    "dialerNumber" : "800505",
+    "languages" :{
+        "Malayalam" : 9
+    }
+},
+{
+    "cardID" : 2,
+    "cardName" : "Hello Card",
+    "dialerNumber" : "800345",
+    "languages" :{
+        "Malayalam" : 1
+    }
+}
+    ]
