@@ -1,7 +1,9 @@
 package com.akhilerm.easydialer;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Locale;
+import java.util.Map;
 
 public class CountryUtil {
 
@@ -11,14 +13,27 @@ public class CountryUtil {
         phoneNumber=phoneNumber.replace("+","");
         HashMap <String, String> countryMap = getCountryMap();
 
-        if (phoneNumber.startsWith("91")||phoneNumber.startsWith("0091"))
-            return "IN";
+        Iterator iterator = countryMap.entrySet().iterator();
+
+        while (iterator.hasNext()) {
+            Map.Entry pair = (Map.Entry) iterator.next();
+            if (phoneNumber.startsWith(pair.getValue().toString()) ||
+                    phoneNumber.startsWith("00" + pair.getValue())) {
+                return pair.getKey().toString();
+            }
+            iterator.remove();
+        }
+
         return "CCD"; //calling card
 
     }
 
     static int getISDCode(String ISOCode) {
-       return getCountryMap().get(ISOCode);
+        String ISDCode = getCountryMap().get(ISOCode).toString();
+        if (ISDCode.isEmpty()) {
+            return 0;
+        }
+       return Integer.parseInt(ISDCode);
     }
 
     static String getCountryName(String ISOCode) {
