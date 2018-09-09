@@ -4,7 +4,10 @@
     "dialerNumber" : "800505",
     "languages" :{
         "Malayalam" : 9
-    }
+    },
+    "delayAfterDialerNumber" : 1,
+    "delayAfterLanguage" : 0,
+    "delayAfterPIN" : 2
 },
 {
     "cardID" : 2,
@@ -12,6 +15,9 @@
     "dialerNumber" : "800345",
     "languages" :{
         "Malayalam" : 1
-    }
+    },
+    "delayAfterDialerNumber" : 1,
+    "delayAfterLanguage" : 1,
+    "delayAfterPIN" : 2
 }
     ]

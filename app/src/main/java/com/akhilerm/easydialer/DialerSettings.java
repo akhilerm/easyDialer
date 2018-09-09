@@ -5,6 +5,8 @@ import android.content.SharedPreferences;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.google.gson.Gson;
+
 import java.util.Arrays;
 
 import static android.content.Context.MODE_PRIVATE;
@@ -13,36 +15,41 @@ public class DialerSettings {
 
     private static final String TAG = DialerSettings.class.getName() + ":DEBUG:";
 
-    private Card card;
-    private boolean isActive;
-    private SharedPreferences settingsData;
+    private SettingsData settingsData;
+    private SharedPreferences appSettings;
 
     public DialerSettings(Context context) {
-        settingsData= context.getSharedPreferences("Settings", MODE_PRIVATE);
-        card = settingsData.getInt(CARD, 0);
-        dialerNumber = settingsData.getString(DIALER_NUMBER, "800505");
-        PINNumber = settingsData.getString(PIN_NUMBER, "");
-        dialerLanguage = settingsData.getInt(DIALER_LANGUAGE, 9);
-        countries = settingsData.getString(COUNTRIES,"IN").split(",");
-        isActive = settingsData.getBoolean(IS_ACTIVE,false);
-        if (!dialerNumber.equals("800505")) {
-            dialerLanguage = 2;
-        }
+        appSettings= context.getSharedPreferences("Settings", MODE_PRIVATE);
+        Gson gson = new Gson();
+        settingsData = gson.fromJson(appSettings.getString("SettingsData", ""), SettingsData.class);
     }
 
     boolean isRedirectionNeeded(String ISOCode) {
-        if (Arrays.asList(countries).contains(ISOCode)) {
+        if (settingsData.getCountries().contains(ISOCode)) {
             return true;
         }
         return false;
     }
 
     String generateDialerNumber(String phoneNumber, String ISOCode) {
-        String finalNumber =dialerNumber + "," + dialerLanguage;
-        if (!dialerNumber.equals("800505")) {
-            finalNumber += ",";
+        StringBuilder finalNumber = new StringBuilder("");
+        finalNumber.append(settingsData.getDialerNumber())
+                .append(generateDelay(settingsData.getDelayAfterDialerNumber()))
+                .append(settingsData.getLanguage())
+                .append(generateDelay(settingsData.getDelayAfterLanguage()))
+                .append(settingsData.getPINNumber()).append("#")
+                .append(generateDelay(settingsData.getDelayAfterPIN()))
+                .append(cleanNumber(phoneNumber, ISOCode));
+
+        return  finalNumber.toString();
+    }
+
+    private String generateDelay(int n) {
+        StringBuilder delay = new StringBuilder("");
+        for (int i = 0; i < n; i ++) {
+            delay.append(",");
         }
-        return  finalNumber + PINNumber + "#,," + cleanNumber(phoneNumber, ISOCode);
+        return delay.toString();
     }
 
     /**
@@ -52,25 +59,21 @@ public class DialerSettings {
      * @return
      */
     private String cleanNumber(String phoneNumber, String ISOCode) {
-        int ISDCode = CountryUtil.getISDCode(ISOCode);
         phoneNumber=phoneNumber.replace("+","");
         phoneNumber=phoneNumber.replaceFirst(CountryUtil.getISDCode(ISOCode)+"","");
         phoneNumber = "00" + CountryUtil.getISDCode(ISOCode) + phoneNumber;
         return phoneNumber;
     }
 
-    boolean saveSettings(int card, String dialerNumber, String PINNumber, int dialerLanguage, String[] countries) {
-        SharedPreferences.Editor editor = settingsData.edit();
-        this.card = card;
-        this.dialerNumber = dialerNumber;
-        this.PINNumber = PINNumber;
-        this.dialerLanguage = dialerLanguage;
-        this.countries = countries;
+    boolean saveSettings(SettingsData settingsData) {
+        this.settingsData = settingsData;
+        return saveSettings();
+    }
 
-        editor.putString(DIALER_NUMBER, dialerNumber);
-        editor.putString(PIN_NUMBER, PINNumber);
-        editor.putInt(DIALER_LANGUAGE, dialerLanguage);
-        editor.putString(COUNTRIES, TextUtils.join(",", countries));
+    private boolean saveSettings(){
+        SharedPreferences.Editor editor = appSettings.edit();
+        Gson gson = new Gson();
+        editor.putString("SettingsData", gson.toJson(settingsData));
         editor.apply();
         return true;
     }
@@ -80,41 +83,18 @@ public class DialerSettings {
      * @return
      */
     boolean isValid() {
-        if (TextUtils.isEmpty(PINNumber)) {
-            return false;
-        }
-        return true;
-    }
-
-    public int getCard() {
-        return card;
-    }
-
-    public String getDialerNumber() {
-        return dialerNumber;
-    }
-
-    public String getPINNumber() {
-        return PINNumber;
-    }
-
-    public int getDialerLanguage() {
-        return dialerLanguage;
-    }
-
-    public String[] getCountries() {
-        return countries;
+        return settingsData.isValid();
     }
 
     public boolean isServiceActive() {
-        return isActive;
+        return settingsData.isActive();
     }
 
-    public boolean toggleServiceStatus() {
-        SharedPreferences.Editor editor = settingsData.edit();
-        editor.putBoolean(IS_ACTIVE, !isActive);
-        editor.apply();
-        return isActive ^= true;
+    public boolean toggleServiceStatus(boolean status) {
+        SharedPreferences.Editor editor = appSettings.edit();
+        settingsData.setActive(status);
+        saveSettings();
+        return status;
     }
 }
 
