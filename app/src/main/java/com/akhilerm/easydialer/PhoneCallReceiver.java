@@ -28,12 +28,14 @@ public class PhoneCallReceiver extends BroadcastReceiver {
     private static final String TAG = PhoneCallReceiver.class.getName() + ":DEBUG:";
 
     private String toCountry;
+    private SettingsData settingsData;
     private DialerSettings dialerSettings;
     static CustomPhoneStateListener customPhoneStateListener;
 
     @Override
     public void onReceive(Context context, Intent intent) {
         dialerSettings = new DialerSettings(context);
+        settingsData = dialerSettings.getSettingsData();
         Log.d(TAG,"Captured Outgoing Call");
         String dialedNumber = intent.getStringExtra(Intent.EXTRA_PHONE_NUMBER);
         Log.d(TAG, "Dialled Number : " + dialedNumber);
@@ -116,8 +118,8 @@ public class PhoneCallReceiver extends BroadcastReceiver {
 
 
         private void onOutgoingCallEnded(String number) {
-            Log.d(TAG, "Dialer Number is " + dialerSettings.getDialerNumber());
-            if(!number.equals(dialerSettings.getDialerNumber())) return;
+            Log.d(TAG, "Dialer Number is " + settingsData.getDialerNumber());
+            if(!number.equals(settingsData.getDialerNumber())) return;
             //to delay the query to URI, so that last data is fetched
             new Handler().postDelayed(new Runnable() {
                 @Override

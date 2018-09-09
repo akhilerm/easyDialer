@@ -78,6 +78,10 @@ public class DialerSettings {
         return true;
     }
 
+    SettingsData getSettingsData() {
+        return settingsData;
+    }
+
     /**
      * Check if valid settings are present
      * @return
