@@ -12,34 +12,17 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <Spinner
-        android:id="@+id/card"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        />
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/DialerNumber"
-        android:inputType="phone"/>
 
-    <EditText
-        android:id="@+id/PINNumber"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="number"
-        />
-
-    <Spinner
-        android:id="@+id/Language"
+    <TextView
+        android:id="@+id/pinNumberView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         />
 
-    <EditText
-        android:id="@+id/Countries"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        />
+    <Button
+        android:id="@+id/toggleButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
 </LinearLayout>
 </android.support.constraint.ConstraintLayout>
