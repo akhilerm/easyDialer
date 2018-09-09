@@ -58,6 +58,6 @@ public class SettingsData {
         return !dialerNumber.isEmpty() &&
                 (language != 0) &&
                 !PINNumber.isEmpty() &&
-                countries.size() > 0;
+                !countries.isEmpty();
     }
 }
