@@ -14,8 +14,10 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
@@ -24,10 +26,9 @@ public class MainActivity extends AppCompatActivity {
     private final int MULTIPLE_PERMISSIONS_REQUEST = 50;
     private boolean isPermissionAvailable = false;
 
-    private ArrayAdapter<String> cardAdapter, langugeAdapter;
-    private EditText dialerNumber, pinNumber, countries;
-    private FloatingActionButton toggleButton, saveButton;
-    private Spinner card, language;
+    private FloatingActionButton renewButton, settingsButton;
+    private Button toggleButton;
+    private TextView pinNumber;
     private DialerSettings dialerSettings;
 
     @Override
@@ -35,25 +36,15 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
-        card = findViewById(R.id.card);
-        dialerNumber = findViewById(R.id.DialerNumber);
-        language = findViewById(R.id.Language);
-        pinNumber = findViewById(R.id.PINNumber);
-        countries = findViewById(R.id.Countries);
+
+        pinNumber = findViewById(R.id.pinNumberView);
         toggleButton = findViewById(R.id.toggleButton);
-        saveButton = findViewById(R.id.saveButton);
+        settingsButton = findViewById(R.id.settingsButton);
+        renewButton = findViewById(R.id.renewButton);
+
         dialerSettings = new DialerSettings(getApplicationContext());
 
         setSupportActionBar(toolbar);
-
-        String[] cardarray = {"Five Card", "Hello Card"};
-        cardAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, cardarray);
-        card.setAdapter(cardAdapter);
-
-        String[] langarray = {"Malayalam"};
-        langugeAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item,
-                langarray);
-        language.setAdapter(langugeAdapter);
 
         checkPermissionAvailable();
         setFields();
@@ -62,24 +53,30 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (dialerSettings.isServiceActive()) {
+                    dialerSettings.toggleServiceStatus(false);
                     stopCallService();
+                    toggleButton.setText("Start");
                 } else {
+                    dialerSettings.toggleServiceStatus(true);
                     startCallService();
+                    toggleButton.setText("Stop");
                 }
-                dialerSettings.toggleServiceStatus();
             }
         });
 
-        saveButton.setOnClickListener(new View.OnClickListener() {
+        renewButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dialerSettings.saveSettings(card.getSelectedItemPosition(),
-                        dialerNumber.getText().toString(),
-                        pinNumber.getText().toString(),
-//                        language.getSelectedItemPosition(),
-                        4,
-                        CountryUtil.getCountryArray(countries.getText().toString()));
-                Toast.makeText(MainActivity.this, "Settings Saved", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(MainActivity.this, RenewActivity.class);
+                MainActivity.this.startActivity(intent);
+            }
+        });
+
+        settingsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
+                MainActivity.this.startActivity(intent);
             }
         });
 
@@ -170,11 +167,13 @@ public class MainActivity extends AppCompatActivity {
      * @return
      */
     private boolean setFields() {
-        card.setSelection(dialerSettings.getCard());
-        dialerNumber.setText(dialerSettings.getDialerNumber());
-        language.setSelection(0);
-        pinNumber.setText(dialerSettings.getPINNumber());
-        countries.setText(TextUtils.join(",", dialerSettings.getCountries()));
+        if (dialerSettings.isServiceActive()) {
+            toggleButton.setText("Stop");
+        }
+        else {
+            toggleButton.setText("Start");
+        }
+        pinNumber.setText(dialerSettings.getSettingsData().getPINNumber());
         return true;
     }
 
