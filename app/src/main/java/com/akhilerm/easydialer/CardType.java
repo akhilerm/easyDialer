@@ -1,5 +1,7 @@
 package com.akhilerm.easydialer;
 
+import java.util.ArrayList;
+
 public class CardType {
     private int cardID;
     private String cardName;
@@ -45,5 +47,23 @@ public class CardType {
 
     public int getDelayAfterPIN() {
         return delayAfterPIN;
+    }
+
+    public static CardType getCardType(int cardID, ArrayList<CardType> cardTypes) {
+        for (CardType cardType : cardTypes) {
+            if (cardType.getCardID() == cardID) {
+                return cardType;
+            }
+        }
+        return null;
+    }
+
+    public static CardType getCardType(String cardName, ArrayList<CardType> cardTypes) {
+        for (CardType cardType : cardTypes) {
+            if (cardType.getCardName().equals(cardName)) {
+                return cardType;
+            }
+        }
+        return null;
     }
 }
