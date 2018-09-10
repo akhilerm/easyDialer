@@ -60,4 +60,20 @@ public class SettingsData {
                 !PINNumber.isEmpty() &&
                 !countries.isEmpty();
     }
+
+    public void setDialerNumber(String dialerNumber) {
+        this.dialerNumber = dialerNumber;
+    }
+
+    public void setLanguage(int language) {
+        this.language = language;
+    }
+
+    public void setPINNumber(String PINNumber) {
+        this.PINNumber = PINNumber;
+    }
+
+    public void setCountries(ArrayList<String> countries) {
+        this.countries = countries;
+    }
 }
