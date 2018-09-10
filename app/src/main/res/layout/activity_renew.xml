@@ -21,7 +21,8 @@
             android:id="@+id/savePINButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Save"
+            android:layout_gravity="bottom|end"
+            android:src="@android:drawable/ic_menu_save" />
             />
 
     </LinearLayout>
