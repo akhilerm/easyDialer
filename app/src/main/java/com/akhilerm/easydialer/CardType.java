@@ -1,17 +1,18 @@
 package com.akhilerm.easydialer;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class CardType {
     private int cardID;
     private String cardName;
     private String dialerNumber;
-    private String[] languages;
+    private HashMap<String, Integer> languages;
     private int delayAfterDialerNumber;
     private int delayAfterLanguage;
     private int delayAfterPIN;
 
-    public CardType(int cardID, String cardName, String dialerNumber, String[] languages, int delayAfterDialerNumber, int delayAfterLanguage, int delayAfterPIN) {
+    public CardType(int cardID, String cardName, String dialerNumber, HashMap<String, Integer> languages, int delayAfterDialerNumber, int delayAfterLanguage, int delayAfterPIN) {
         this.cardID = cardID;
         this.cardName = cardName;
         this.dialerNumber = dialerNumber;
@@ -33,7 +34,7 @@ public class CardType {
         return dialerNumber;
     }
 
-    public String[] getLanguages() {
+    public HashMap<String, Integer> getLanguages() {
         return languages;
     }
 
