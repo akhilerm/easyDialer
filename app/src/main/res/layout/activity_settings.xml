@@ -12,7 +12,7 @@
         android:orientation="vertical">
 
         <Spinner
-            android:id="@+id/cardType"
+            android:id="@+id/cardTypeSpinner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 
@@ -23,7 +23,7 @@
             android:inputType="phone"/>
 
         <Spinner
-            android:id="@+id/languageChooser"
+            android:id="@+id/languageSpinner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 

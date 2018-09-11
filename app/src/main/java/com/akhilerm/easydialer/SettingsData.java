@@ -11,11 +11,24 @@ public class SettingsData {
     private int delayAfterDialerNumber;
     private int delayAfterLanguage;
     private int delayAfterPIN;
-    private boolean isActive = false;
+    private boolean isActive;
 
-    public SettingsData(CardType cardType, String PINNumber, ArrayList<String> countries) {
+    public SettingsData() {
+        this("", 0, "", new ArrayList<String>(),
+                0,0,0, false);
+    }
+
+    public SettingsData(String dialerNumber, int language, String PINNumber,
+                        ArrayList<String> countries, int delayAfterDialerNumber,
+                        int delayAfterLanguage, int delayAfterPIN, boolean isActive) {
+        this.dialerNumber = dialerNumber;
+        this.language = language;
         this.PINNumber = PINNumber;
         this.countries = countries;
+        this.delayAfterDialerNumber = delayAfterDialerNumber;
+        this.delayAfterLanguage = delayAfterLanguage;
+        this.delayAfterPIN = delayAfterPIN;
+        this.isActive = isActive;
     }
 
     public String getPINNumber() {
