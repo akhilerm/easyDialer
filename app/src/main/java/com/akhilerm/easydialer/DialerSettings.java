@@ -21,7 +21,13 @@ public class DialerSettings {
     public DialerSettings(Context context) {
         appSettings= context.getSharedPreferences("Settings", MODE_PRIVATE);
         Gson gson = new Gson();
-        settingsData = gson.fromJson(appSettings.getString("SettingsData", ""), SettingsData.class);
+        String json = appSettings.getString("SettingsData", "");
+        if (json.isEmpty()) {
+            settingsData = new SettingsData();
+        }
+        else {
+            settingsData = gson.fromJson(json, SettingsData.class);
+        }
     }
 
     boolean isRedirectionNeeded(String ISOCode) {
@@ -99,6 +105,10 @@ public class DialerSettings {
         settingsData.setActive(status);
         saveSettings();
         return status;
+    }
+
+    public String getCountries() {
+        return TextUtils.join(",", settingsData.getCountries());
     }
 }
 

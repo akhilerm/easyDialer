@@ -37,7 +37,7 @@ public class CallService extends Service {
             NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "101")
                     .setSmallIcon(R.drawable.ic_launcher_foreground)
                     .setContentTitle("easyDialer is Active")
-                    .setContentText("Calls to "+ TextUtils.join(",",new DialerSettings(getApplicationContext()).getCountries())+" are being rerouted")
+                    .setContentText("Calls to "+ new DialerSettings(getApplicationContext()).getCountries() +" are being rerouted")
                     .setContentIntent(pendingIntent);
             Notification notification=builder.build();
             NotificationChannel channel = new NotificationChannel("101", "easy Dialer", NotificationManager.IMPORTANCE_DEFAULT);
