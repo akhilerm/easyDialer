@@ -109,12 +109,9 @@ public class SettingsActivity extends AppCompatActivity {
         cardTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                Iterator languageIterator  = cardTypeAdapter.getItem(position).getLanguages().entrySet().iterator();
                 ArrayList<String> languageList = new ArrayList<>();
-                while (languageIterator.hasNext()) {
-                    Map.Entry pair = (Map.Entry) languageIterator.next();
-                    languageList.add(pair.getKey().toString());
-                    languageIterator.remove();
+                for (String language :cardTypeAdapter.getItem(position).getLanguages().keySet()) {
+                    languageList.add(language);
                 }
 
                 ArrayAdapter languagesAdapter  = new ArrayAdapter(SettingsActivity.this, R.layout.language_list,
