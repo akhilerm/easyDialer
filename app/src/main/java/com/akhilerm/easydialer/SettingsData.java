@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 public class SettingsData {
 
+    private int cardID;
     private String dialerNumber;
     private int language;
     private String PINNumber;
@@ -14,13 +15,14 @@ public class SettingsData {
     private boolean isActive;
 
     public SettingsData() {
-        this("", 0, "", new ArrayList<String>(),
+        this(0, "", 0, "", new ArrayList<String>(),
                 0,0,0, false);
     }
 
-    public SettingsData(String dialerNumber, int language, String PINNumber,
+    public SettingsData(int cardID, String dialerNumber, int language, String PINNumber,
                         ArrayList<String> countries, int delayAfterDialerNumber,
                         int delayAfterLanguage, int delayAfterPIN, boolean isActive) {
+        this.cardID = cardID;
         this.dialerNumber = dialerNumber;
         this.language = language;
         this.PINNumber = PINNumber;
@@ -72,6 +74,10 @@ public class SettingsData {
                 (language != 0) &&
                 !PINNumber.isEmpty() &&
                 !countries.isEmpty();
+    }
+
+    public void setCardID(int cardID) {
+        this.cardID = cardID;
     }
 
     public void setDialerNumber(String dialerNumber) {

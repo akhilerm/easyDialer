@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -28,6 +29,8 @@ public class SettingsActivity extends AppCompatActivity {
     private Button saveButton;
     private Spinner cardTypeSpinner;
     private Spinner languageSpinner;
+    private EditText dialerNumber;
+    private EditText selectedCountries;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +38,9 @@ public class SettingsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_settings);
 
         cardTypeSpinner = findViewById(R.id.cardTypeSpinner);
+        dialerNumber = findViewById(R.id.dialerNumber);
         languageSpinner = findViewById(R.id.languageSpinner);
+        selectedCountries = findViewById(R.id.countryPicker);
         saveButton = findViewById(R.id.saveSettingsButton);
 
         dialerSettings = new DialerSettings(getApplicationContext());
@@ -43,12 +48,18 @@ public class SettingsActivity extends AppCompatActivity {
 
         loadCardTypeDetails();
 
+        if (settingsData.isValid()) {
+            loadCurrentValues();
+        }
+
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 CardType cardType = (CardType) cardTypeSpinner.getSelectedItem();
-                settingsData.setDialerNumber(cardType.getDialerNumber());
+                settingsData.setCardID(cardType.getCardID());
+                settingsData.setDialerNumber(dialerNumber.getText().toString().trim());
                 settingsData.setLanguage(cardType.getLanguages().get(languageSpinner.getSelectedItem()));
+                //TODO settingsData.setCountries();
 
                 if (settingsData.isValid()) {
                     dialerSettings.saveSettings(settingsData);
@@ -105,11 +116,13 @@ public class SettingsActivity extends AppCompatActivity {
         final CardTypeAdapter cardTypeAdapter = new CardTypeAdapter(SettingsActivity.this, R.layout.cardtype_list,
                 R.id.cardSpinnerText, cardTypeList);
         cardTypeSpinner.setAdapter(cardTypeAdapter);
+        cardTypeSpinner.setSelection(0);
 
         cardTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 ArrayList<String> languageList = new ArrayList<>();
+
                 for (String language :cardTypeAdapter.getItem(position).getLanguages().keySet()) {
                     languageList.add(language);
                 }
@@ -126,5 +139,9 @@ public class SettingsActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void loadCurrentValues() {
+        //TODO to set current values of settings data to all fields
     }
 }
