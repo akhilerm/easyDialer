@@ -127,16 +127,7 @@ public class SettingsActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 CardType selectedCardType = cardTypeAdapter.getItem(position);
-                dialerNumber.setText(selectedCardType.getDialerNumber());
-                ArrayList<String> languageList = new ArrayList<>();
-
-                for (String language :selectedCardType.getLanguages().keySet()) {
-                    languageList.add(language);
-                }
-
-                ArrayAdapter languagesAdapter  = new ArrayAdapter(SettingsActivity.this, R.layout.language_list,
-                        R.id.languageSpinnerText, languageList);
-                languageSpinner.setAdapter(languagesAdapter);
+                setLanguages(selectedCardType);
 
             }
 
@@ -153,8 +144,9 @@ public class SettingsActivity extends AppCompatActivity {
     private void loadCurrentValues() {
         CardType cardType = CardType.getCardType(settingsData.getCardID(), cardTypeList);
         cardTypeSpinner.setSelection(findCardPosition(cardType.getCardName(), (CardTypeAdapter) cardTypeSpinner.getAdapter()));
+        setLanguages(cardType);
         dialerNumber.setText(settingsData.getDialerNumber());
-        languageSpinner.setSelection(findLangPosition(cardType.getLanguageName(settingsData.getLanguage()), (ArrayAdapter) languageSpinner.getAdapter()));
+        languageSpinner.setSelection(findLangPosition(cardType.getLanguageName(settingsData.getLanguage()), (ArrayAdapter) languageSpinner.getAdapter()), false);
         selectedCountries.setText(TextUtils.join(",", settingsData.getCountries()));
     }
 
@@ -175,5 +167,18 @@ public class SettingsActivity extends AppCompatActivity {
             }
         }
         return -1;
+    }
+
+    private void setLanguages(CardType selectedCardType) {
+        dialerNumber.setText(selectedCardType.getDialerNumber());
+        ArrayList<String> languageList = new ArrayList<>();
+
+        for (String language :selectedCardType.getLanguages().keySet()) {
+            languageList.add(language);
+        }
+
+        ArrayAdapter languagesAdapter  = new ArrayAdapter(SettingsActivity.this, R.layout.language_list,
+                R.id.languageSpinnerText, languageList);
+        languageSpinner.setAdapter(languagesAdapter);
     }
 }
