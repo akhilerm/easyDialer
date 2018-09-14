@@ -84,6 +84,12 @@ public class SettingsData {
         this.dialerNumber = dialerNumber;
     }
 
+    public void setDelays(int delayAfterDialerNumber, int delayAfterLanguage, int delayAfterPIN) {
+        this.delayAfterDialerNumber = delayAfterDialerNumber;
+        this.delayAfterLanguage = delayAfterLanguage;
+        this.delayAfterPIN = delayAfterPIN;
+    }
+
     public void setLanguage(int language) {
         this.language = language;
     }

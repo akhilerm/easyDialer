@@ -59,6 +59,9 @@ public class SettingsActivity extends AppCompatActivity {
                 settingsData.setCardID(cardType.getCardID());
                 settingsData.setDialerNumber(dialerNumber.getText().toString().trim());
                 settingsData.setLanguage(cardType.getLanguages().get(languageSpinner.getSelectedItem()));
+                settingsData.setDelays(cardType.getDelayAfterDialerNumber(),
+                        cardType.getDelayAfterLanguage(),
+                        cardType.getDelayAfterPIN());
                 //TODO settingsData.setCountries();
 
                 if (settingsData.isValid()) {
@@ -121,9 +124,11 @@ public class SettingsActivity extends AppCompatActivity {
         cardTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                CardType selectedCardType = cardTypeAdapter.getItem(position);
+                dialerNumber.setText(selectedCardType.getDialerNumber());
                 ArrayList<String> languageList = new ArrayList<>();
 
-                for (String language :cardTypeAdapter.getItem(position).getLanguages().keySet()) {
+                for (String language :selectedCardType.getLanguages().keySet()) {
                     languageList.add(language);
                 }
 
