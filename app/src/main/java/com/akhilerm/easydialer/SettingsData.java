@@ -90,6 +90,10 @@ public class SettingsData {
         this.delayAfterPIN = delayAfterPIN;
     }
 
+    public int getCardID() {
+        return cardID;
+    }
+
     public void setLanguage(int language) {
         this.language = language;
     }

@@ -177,4 +177,10 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        dialerSettings.load(getApplicationContext());
+    }
+
 }

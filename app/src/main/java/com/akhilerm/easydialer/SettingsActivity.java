@@ -2,12 +2,14 @@ package com.akhilerm.easydialer;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -17,6 +19,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -30,6 +33,7 @@ public class SettingsActivity extends AppCompatActivity {
     private Spinner cardTypeSpinner;
     private Spinner languageSpinner;
     private EditText dialerNumber;
+    private ArrayList<CardType> cardTypeList;
     private EditText selectedCountries;
 
     @Override
@@ -46,6 +50,7 @@ public class SettingsActivity extends AppCompatActivity {
         dialerSettings = new DialerSettings(getApplicationContext());
         settingsData = dialerSettings.getSettingsData();
 
+        cardTypeList = loadCards();
         loadCardTypeDetails();
 
         if (settingsData.isValid()) {
@@ -62,7 +67,7 @@ public class SettingsActivity extends AppCompatActivity {
                 settingsData.setDelays(cardType.getDelayAfterDialerNumber(),
                         cardType.getDelayAfterLanguage(),
                         cardType.getDelayAfterPIN());
-                //TODO settingsData.setCountries();
+                settingsData.setCountries(new ArrayList<String>(Arrays.asList(selectedCountries.getText().toString().split("\\s*,\\s*"))));
 
                 if (settingsData.isValid()) {
                     dialerSettings.saveSettings(settingsData);
@@ -109,7 +114,6 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     private void loadCardTypeDetails() {
-        final List<CardType> cardTypeList = loadCards();
         List<String> cardTypes = new ArrayList<>();
 
         for (CardType cardType : cardTypeList) {
@@ -118,8 +122,6 @@ public class SettingsActivity extends AppCompatActivity {
 
         final CardTypeAdapter cardTypeAdapter = new CardTypeAdapter(SettingsActivity.this, R.layout.cardtype_list,
                 R.id.cardSpinnerText, cardTypeList);
-        cardTypeSpinner.setAdapter(cardTypeAdapter);
-        cardTypeSpinner.setSelection(0);
 
         cardTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -144,9 +146,34 @@ public class SettingsActivity extends AppCompatActivity {
             }
         });
 
+        cardTypeSpinner.setAdapter(cardTypeAdapter);
+        cardTypeSpinner.setSelection(0);
     }
 
     private void loadCurrentValues() {
-        //TODO to set current values of settings data to all fields
+        CardType cardType = CardType.getCardType(settingsData.getCardID(), cardTypeList);
+        cardTypeSpinner.setSelection(findCardPosition(cardType.getCardName(), (CardTypeAdapter) cardTypeSpinner.getAdapter()));
+        dialerNumber.setText(settingsData.getDialerNumber());
+        languageSpinner.setSelection(findLangPosition(cardType.getLanguageName(settingsData.getLanguage()), (ArrayAdapter) languageSpinner.getAdapter()));
+        selectedCountries.setText(TextUtils.join(",", settingsData.getCountries()));
+    }
+
+    private int findCardPosition(String text, CardTypeAdapter spinnerAdapter) {
+        int count = spinnerAdapter.getCount();
+        for (int i = 0;i < count;i++) {
+            if (text.equals(spinnerAdapter.getItem(i).getCardName())) {
+                return i;
+            }
+        }
+        return -1;
+    }
+    private int findLangPosition(String text, ArrayAdapter spinnerAdapter) {
+        int count = spinnerAdapter.getCount();
+        for (int i = 0;i < count;i++) {
+            if (text.equals(spinnerAdapter.getItem(i).toString())) {
+                return i;
+            }
+        }
+        return -1;
     }
 }

@@ -2,6 +2,7 @@ package com.akhilerm.easydialer;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 public class CardType {
     private int cardID;
@@ -63,6 +64,15 @@ public class CardType {
         for (CardType cardType : cardTypes) {
             if (cardType.getCardName().equals(cardName)) {
                 return cardType;
+            }
+        }
+        return null;
+    }
+
+    public String getLanguageName(int languageNo) {
+        for (Map.Entry pair : languages.entrySet()) {
+            if ((int)pair.getValue() == languageNo) {
+                return pair.getKey().toString();
             }
         }
         return null;
