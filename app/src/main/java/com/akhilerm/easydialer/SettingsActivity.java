@@ -146,7 +146,7 @@ public class SettingsActivity extends AppCompatActivity {
         cardTypeSpinner.setSelection(findCardPosition(cardType.getCardName(), (CardTypeAdapter) cardTypeSpinner.getAdapter()));
         setLanguages(cardType);
         dialerNumber.setText(settingsData.getDialerNumber());
-        languageSpinner.setSelection(findLangPosition(cardType.getLanguageName(settingsData.getLanguage()), (ArrayAdapter) languageSpinner.getAdapter()), false);
+        languageSpinner.setSelection(findLangPosition(cardType.getLanguageName(settingsData.getLanguage()), (ArrayAdapter) languageSpinner.getAdapter()), true);
         selectedCountries.setText(TextUtils.join(",", settingsData.getCountries()));
     }
 
