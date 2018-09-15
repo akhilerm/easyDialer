@@ -1,6 +1,6 @@
 package com.akhilerm.easydialer;
 
-import android.support.v7.app.AppCompatActivity;
+import android.app.Activity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -9,7 +9,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -20,12 +19,9 @@ import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
-public class SettingsActivity extends AppCompatActivity {
+public class SettingsActivity extends Activity {
 
     private DialerSettings dialerSettings;
     private SettingsData settingsData;
@@ -82,7 +78,7 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     private ArrayList<CardType> loadCards() {
-        ArrayList<CardType> cardTypes = new ArrayList<>();
+        ArrayList<CardType> cardTypes;
 
         String json = loadJSONFromAsset();
 
@@ -133,7 +129,9 @@ public class SettingsActivity extends AppCompatActivity {
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-
+                /**
+                 * when no action is done in the spinner, the value stays as it is.
+                 */
             }
         });
 
